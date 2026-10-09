@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>you dont know who i am...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+        .text {
+            font-size: 24px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            text-align: center;
+        }
+        .timer {
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="text">you dont know who i am</div>
+    <div class="timer" id="timer">00:00:00:00</div>
+
+    <script>
+        const timerElement = document.getElementById('timer');
+        const STORAGE_KEY = 'infinite_timer_start_time';
+
+        // Obtener o establecer la fecha de inicio original en el almacenamiento local
+        let startTime = localStorage.getItem(STORAGE_KEY);
+
+        if (!startTime) {
+            startTime = Date.now().toString();
+            localStorage.setItem(STORAGE_KEY, startTime);
+        }
+
+        const startTimestamp = parseInt(startTime, 10);
+
+        function updateTimer() {
+            const now = Date.now();
+            const elapsedTime = now - startTimestamp;
+
+            // Cálculos de tiempo
+            const totalSeconds = Math.floor(elapsedTime / 1000);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const days = Math.floor(totalHours / 24);
+
+            const displaySeconds = String(totalSeconds % 60).padStart(2, '0');
+            const displayMinutes = String(totalMinutes % 60).padStart(2, '0');
+            const displayHours = String(totalHours % 24).padStart(2, '0');
+            const displayDays = String(days).padStart(2, '0');
+
+            // Formato de visualización: Días:Horas:Minutos:Segundos
+            timerElement.textContent = `${displayDays}:${displayHours}:${displayMinutes}:${displaySeconds}`;
+        }
+
+        // Actualizar el temporizador cada segundo
+        setInterval(updateTimer, 1000);
+        
+        // Ejecución inmediata al cargar la página
+        updateTimer();
+    </script>
+
+</body>
+</html>
